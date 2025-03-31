@@ -21,9 +21,10 @@ namespace Simple_Bank_Account_System
                 Console.WriteLine("Nice! You already have an account.");
            
                 string[] accountInfo = File.ReadAllLines(filePath);
+                
                 Console.WriteLine($"Name: {accountInfo[0]}");
                 Console.WriteLine($"Age: {accountInfo[1]}\n");
-                Console.WriteLine($"Money: {accountInfo[3]}\n");
+                Console.WriteLine($"Money: £{accountInfo[3]}\n");
                 
             }
             else
@@ -154,6 +155,23 @@ namespace Simple_Bank_Account_System
         // This function will carry out withdrawing money from their account
         static void Withdraw(string filePath)
         {
+            string[] accountInfo = File.ReadAllLines(filePath);
+            double currentBalance = double.Parse(accountInfo[3]);
+
+            Console.Write("Enter an amount to withdraw: ");
+            if (double.TryParse(Console.ReadLine(), out double amount) && amount > 0)
+            {
+                currentBalance -= amount;
+                accountInfo[3] = currentBalance.ToString();
+                File.WriteAllLines(filePath, accountInfo);
+                Console.WriteLine($"Withdrew {amount:C}. New balance: {currentBalance:C}");
+            }
+            else
+            {
+                Console.WriteLine("Invalid amount please enter a positive number.");
+            }
+
+
 
         }
 
