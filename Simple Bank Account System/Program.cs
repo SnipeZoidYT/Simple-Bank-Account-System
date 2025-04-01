@@ -11,21 +11,22 @@ namespace Simple_Bank_Account_System
         {
             // In this program you will be able to deposit, withdraw money to and from your account
 
+            // Here we are declaring and initilizing the vairables 
             int choice;
-            bool isValidChoice = false; 
+            bool isValidChoice = false;
             string filePath = @"C:\Users\snipe\Downloads\account.txt";
-           
 
+            // This if function is checking if the user allready has an account if they do not then it asks them to make an account
             if (File.Exists(filePath))
             {
                 Console.WriteLine("Nice! You already have an account.");
-           
+
                 string[] accountInfo = File.ReadAllLines(filePath);
-                
+
                 Console.WriteLine($"Name: {accountInfo[0]}");
                 Console.WriteLine($"Age: {accountInfo[1]}\n");
                 Console.WriteLine($"Money: £{accountInfo[3]}\n");
-                
+
             }
             else
             {
@@ -44,13 +45,13 @@ namespace Simple_Bank_Account_System
 
                 string accountDetails = $"{name}\n{age}\n{password}\n{money}";
 
-               
+
                 File.WriteAllText(filePath, accountDetails);
                 Console.WriteLine("Account created successfully!");
             }
 
 
-
+            // Here we are asking the user what functions they want to do
 
             Console.WriteLine("Welcome to this simple banking app!");
             Console.WriteLine("1. Deposit");
@@ -59,6 +60,7 @@ namespace Simple_Bank_Account_System
             Console.WriteLine("4. Exit");
             Console.Write(": ");
 
+            // This if statement 
             if (!int.TryParse(Console.ReadLine(), out choice))
             {
                 Console.WriteLine("Please enter a valid number.");
@@ -111,7 +113,7 @@ namespace Simple_Bank_Account_System
                     case 2:
                         Console.WriteLine("You picked Withdraw.");
                         isValidChoice = true;
-                        Withdraw(filePath); 
+                        Withdraw(filePath);
                         break;
                     case 3:
                         Console.WriteLine("You picked View account");
@@ -191,7 +193,7 @@ namespace Simple_Bank_Account_System
             Console.WriteLine($"|                         |");
             Console.WriteLine($"|                         |");
             Console.WriteLine($"---------------------------");
-            
+
         }
 
 
