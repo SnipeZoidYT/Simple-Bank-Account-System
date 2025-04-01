@@ -16,7 +16,7 @@ namespace Simple_Bank_Account_System
             bool isValidChoice = false;
             string filePath = @"C:\Users\snipe\Downloads\account.txt";
 
-            // This if function is checking if the user allready has an account if they do not then it asks them to make an account
+            // This if function is checking if the user all ready has an account
             if (File.Exists(filePath))
             {
                 Console.WriteLine("Nice! You already have an account.");
@@ -28,6 +28,7 @@ namespace Simple_Bank_Account_System
                 Console.WriteLine($"Money: £{accountInfo[3]}\n");
 
             }
+            // If they do not then it asks them to make an account
             else
             {
                 Console.WriteLine("Please create an account.");
@@ -51,8 +52,7 @@ namespace Simple_Bank_Account_System
             }
 
 
-            // Here we are asking the user what functions they want to do
-
+            // Here we are asking the user what functions they want to execute
             Console.WriteLine("Welcome to this simple banking app!");
             Console.WriteLine("1. Deposit");
             Console.WriteLine("2. Withdraw");
@@ -60,12 +60,18 @@ namespace Simple_Bank_Account_System
             Console.WriteLine("4. Exit");
             Console.Write(": ");
 
-            // This if statement 
+            // This if statement reads the users input and if it is not a whole number it asks again
             if (!int.TryParse(Console.ReadLine(), out choice))
             {
                 Console.WriteLine("Please enter a valid number.");
+                Console.WriteLine("1. Deposit");
+                Console.WriteLine("2. Withdraw");
+                Console.WriteLine("3. View Account");
+                Console.WriteLine("4. Exit");
+                Console.Write(": ");
             }
 
+            // This switch statement decides what function to execute depending on the users correct inputted number
             switch (choice)
             {
                 case 1:
