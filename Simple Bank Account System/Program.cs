@@ -1,13 +1,39 @@
 ﻿using System;
 using System.Data.SqlTypes;
 using System.IO;
-using System.Security.Cryptography.X509Certificates;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace Simple_Bank_Account_System
 {
     internal class Program
     {
         static void Main(string[] args)
+        {
+
+            MainMenu();
+
+        }
+
+        // This function encrypts the users password yes it aint the best encryption/hash and cound be better but atleast the password aint in plain text
+        static string EncryptPassword(string password)
+        {
+            using (SHA256 sha256Hash = SHA256.Create())
+            {
+                // ComputeHash - returns byte array
+                byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(password));
+
+                // Convert byte array to a string
+                StringBuilder builder = new StringBuilder();
+                for (int i = 0; i < bytes.Length; i++)
+                {
+                    builder.Append(bytes[i].ToString("x2"));
+                }
+                return builder.ToString();
+            }
+        }
+
+        static  void MainMenu()
         {
             // In this program you will be able to deposit, withdraw money to and from your account
 
@@ -42,9 +68,11 @@ namespace Simple_Bank_Account_System
                 Console.Write("Enter a password: ");
                 string password = Console.ReadLine();
 
+                string encryptedPassword = EncryptPassword(password);
+
                 double money = 0;
 
-                string accountDetails = $"{name}\n{age}\n{password}\n{money}";
+                string accountDetails = $"{name}\n{age}\n{encryptedPassword}\n{money}";
 
 
                 File.WriteAllText(filePath, accountDetails);
@@ -99,7 +127,8 @@ namespace Simple_Bank_Account_System
                     break;
             }
 
-
+            // This while loop checks if the inputed number is valid
+            // If it is a valid choice then it will take the user to the corrisponding function
             while (!isValidChoice)
             {
                 Console.WriteLine("1. Deposit");
@@ -137,8 +166,9 @@ namespace Simple_Bank_Account_System
                 }
 
             }
-
         }
+
+
 
         // This function will carry out depositing money into their account 
         static void Deposit(string filePath)
@@ -158,6 +188,32 @@ namespace Simple_Bank_Account_System
             {
                 Console.WriteLine("Invalid amount. Please enter a positive number.");
             }
+
+            Console.Write("Would you like to go back to the main menu?: ");
+            string choice = Console.ReadLine().ToLower();
+            bool isValidChoice = false;
+
+            while (!isValidChoice)
+            {
+                if (choice == "y")
+                {
+                    MainMenu();
+                    isValidChoice = true;
+                }
+                else if (choice == "n")
+                {
+                    Console.WriteLine("Goodbye!");
+                    Console.WriteLine("Exiting the program..........");
+                    isValidChoice = true;
+                }
+                else
+                {
+                    Console.WriteLine("Enter a valid choice (y or n)");
+                    Console.Write(": ");
+                    choice = Console.ReadLine().ToLower();
+                }
+            }
+
         }
 
         // This function will carry out withdrawing money from their account
@@ -169,17 +225,48 @@ namespace Simple_Bank_Account_System
             Console.Write("Enter an amount to withdraw: ");
             if (double.TryParse(Console.ReadLine(), out double amount) && amount > 0)
             {
-                currentBalance -= amount;
-                accountInfo[3] = currentBalance.ToString();
-                File.WriteAllLines(filePath, accountInfo);
-                Console.WriteLine($"Withdrew {amount:C}. New balance: {currentBalance:C}");
+                if (amount  < currentBalance)
+                {
+                    currentBalance -= amount;
+                    accountInfo[3] = currentBalance.ToString();
+                    File.WriteAllLines(filePath, accountInfo);
+                    Console.WriteLine($"Withdrew {amount:C}. New balance: {currentBalance:C}");
+                }
+                else
+                {
+                    Console.WriteLine("Invalid amount please enter a valid amount.");
+                    Console.WriteLine($"You only have {currentBalance:C}");
+                }
             }
             else
             {
-                Console.WriteLine("Invalid amount please enter a positive number.");
+                Console.WriteLine("err"); 
             }
 
+            Console.Write("Would you like to go back to the main menu?: ");
+            string choice = Console.ReadLine().ToLower();
+            bool isValidChoice = false;
 
+            while (!isValidChoice)
+            {
+                if (choice == "y")
+                {
+                    MainMenu();
+                    isValidChoice = true;
+                }
+                else if (choice == "n")
+                {
+                    Console.WriteLine("Goodbye!");
+                    Console.WriteLine("Exiting the program..........");
+                    isValidChoice = true;
+                }
+                else
+                {
+                    Console.WriteLine("Enter a valid choice (y or n)");
+                    Console.Write(": ");
+                    choice = Console.ReadLine().ToLower();
+                }
+            }
 
         }
 
@@ -187,7 +274,7 @@ namespace Simple_Bank_Account_System
         static void Account(string filePath)
         {
             string[] accountInfo = File.ReadAllLines(filePath);
-
+            
 
             Console.WriteLine($"Welcome to the account page");
             Console.WriteLine($"---------------------------");
@@ -200,8 +287,30 @@ namespace Simple_Bank_Account_System
             Console.WriteLine($"|                         |");
             Console.WriteLine($"---------------------------");
 
+            Console.Write("Would you like to go back to the main menu?: ");
+            string choice = Console.ReadLine().ToLower();
+            bool isValidChoice = false;
+
+            while (!isValidChoice)
+            {
+                if (choice == "y")
+                {
+                    MainMenu();
+                    isValidChoice = true;
+                }
+                else if (choice == "n")
+                {
+                    Console.WriteLine("Goodbye!");
+                    Console.WriteLine("Exiting the program..........");
+                    isValidChoice = true;
+                }
+                else
+                {
+                    Console.WriteLine("Enter a valid choice (y or n)");
+                    Console.Write(": ");
+                    choice = Console.ReadLine().ToLower();
+                }
+            }
         }
-
-
     }
 }
